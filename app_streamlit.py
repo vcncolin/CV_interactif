@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import altair as alt
+import plotly.express as px
 
 # Load your data
 df = pd.read_csv('data.csv')
@@ -14,23 +14,11 @@ year_range = st.sidebar.slider('Select Year Range', min(df['Année']), max(df['A
 # Filter data based on selected year range
 df_filtered = df[(df['Année'] >= year_range[0]) & (df['Année'] <= year_range[1])]
 
-# Prepare data for pie charts
-topic_data = df_filtered.groupby('Sous-groupe')['Volume'].sum().reset_index().rename(columns={'Sous-groupe': 'category', 'hour volume': 'Volume'})
-genre_data = df_filtered.groupby('Niveau')['Volume'].sum().reset_index().rename(columns={'Niveau': 'category', 'hour volume': 'Volume'})
-
 # Create pie charts
-base = alt.Chart().encode(
-    alt.Theta("Volume:Q").stack(True),
-    alt.Color("category:N").legend(None)
-)
-
-pie_topic = base.mark_arc(outerRadius=120).transform_filter(alt.FieldEqualPredicate(field='category', one=topic_data['category']))
-text_topic = base.mark_text(radius=140, size=20).encode(text="category:N").transform_filter(alt.FieldEqualPredicate(field='category', one=topic_data['category']))
-
-pie_genre = base.mark_arc(outerRadius=120).transform_filter(alt.FieldEqualPredicate(field='category', one=genre_data['category']))
-text_genre = base.mark_text(radius=140, size=20).encode(text="category:N").transform_filter(alt.FieldEqualPredicate(field='category', one=genre_data['category']))
+pie_topic = px.pie(df_filtered, values='Volume', names='Intitulé', title='Topic Repartition')
+pie_genre = px.pie(df_filtered, values='Volume', names='Cursus', title='Genre Repartition')
 
 # Display pie charts side by side
 col1, col2 = st.columns(2)
-col1.altair_chart(pie_topic + text_topic)
-col2.altair_chart(pie_genre + text_genre)
+col1.plotly_chart(pie_topic)
+col2.plotly_chart(pie_genre)
