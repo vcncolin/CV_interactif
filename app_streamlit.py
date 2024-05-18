@@ -15,8 +15,8 @@ year_range = st.sidebar.slider('Select Year Range', min(df['Année']), max(df['A
 df_filtered = df[(df['Année'] >= year_range[0]) & (df['Année'] <= year_range[1])]
 
 # Create pie charts
-pie_topic = px.pie(df_filtered, values='Volume', names='Intitulé', title='Topic Repartition')
-pie_genre = px.pie(df_filtered, values='Volume', names='Cursus', title='Genre Repartition')
+pie_topic = px.pie(df_filtered, values='Volume', names='Sous-groupe', title="Domaine enseigné")
+pie_genre = px.pie(df_filtered, values='Volume', names='Niveau', title="Niveau d'études")
 
 # Display pie charts side by side
 col1, col2 = st.columns(2)
