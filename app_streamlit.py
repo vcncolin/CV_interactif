@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 # Set the sidebar width
-st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
+#st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
 # Load your data
 df = pd.read_csv('data.csv')
@@ -13,7 +13,7 @@ st.title("Vincent COLIN - Domaines d'enseignement")
 
 # Add a slider in the sidebar
 year_range = st.slider('Select Year Range', min(df['Année']), max(df['Année']), value=[min(df['Année']), max(df['Année'])])
-field = st.multiselect("Domaine d'enseignement", df['Groupe'].unique())
+field = st.multiselect("Domaine d'enseignement", df['Groupe'].unique(), default=df['Groupe'].unique())
 
 # Filter data based on selected year range
 df_filtered = df[(df['Année'] >= year_range[0]) & (df['Année'] <= year_range[1]) & df['Groupe'].isin(field)]
